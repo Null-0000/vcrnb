@@ -348,8 +348,8 @@ class AttentionOnAttention(nn.Module):
         return output
 
 
-@Model.register('base_4_aligner')
-class Base4Aligner(Model):
+@Model.register('base_4_detector')
+class Base4Detector(Model):
     def __init__(
             self,
             vocab: Vocabulary,

@@ -21,7 +21,7 @@
       "bidirectional": true
     },
     "detector": {
-      "type": "base_4_aligner",
+      "type": "base_4_detector",
       "logits_predictor": {
         "type": "inner_product_predictor",
         "logits_weight": 20
