@@ -1,0 +1,66 @@
+{
+  "dataset_reader": {
+    "type": "vswag",
+    "only_use_relevant_dets": false,
+    "add_image_as_a_box": true
+  },
+  "model": {
+    "type": "my_model",
+    "span_encoder_q": {
+      "type": "gru",
+      "input_size": 1280,
+      "hidden_size": 256,
+      "num_layers": 1,
+      "bidirectional": true
+    },
+	"span_encoder_a": {
+      "type": "gru",
+      "input_size": 1280,
+      "hidden_size": 256,
+      "num_layers": 1,
+      "bidirectional": true
+    },
+    "detector": {
+      "type": "base_4_aligner",
+      "logits_predictor": {
+        "type": "inner_product_predictor",
+        "logits_weight": 20
+      },
+      "align_loss_model": {
+        "type": "align_cross_entropy_loss",
+        "weight": 0.1
+      },
+      "align_key": "att_last"
+    },
+    "semantic": true,
+    "rnn_input_dropout": 0.3,
+    "output_dropout": 0.3,
+    "initializer": [
+      [".*weight_ih.*", {"type": "xavier_uniform"}],
+      [".*weight_hh.*", {"type": "orthogonal"}],
+      [".*bias_ih.*", {"type": "zero"}],
+      [".*bias_hh.*", {"type": "lstm_hidden_bias"}]
+    ]
+  },
+  "trainer": {
+    "optimizer": {
+        "type": "adam",
+        "lr": 0.0002,
+        "weight_decay": 0.0001
+    },
+    "validation_metric": "+accuracy",
+    "num_serialized_models_to_keep": 2,
+    "num_epochs": 100,
+    "grad_norm": 1.0,
+    "patience": 10000,
+    "cuda_device": 0,
+    "learning_rate_scheduler": {
+      "type": "reduce_on_plateau",
+      "factor": 0.5,
+      "mode": "max",
+      "patience": 1,
+      "verbose": true,
+      "cooldown": 1
+    }
+  }
+}
